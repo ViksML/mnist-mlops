@@ -1,6 +1,6 @@
 # MNIST Lightweight CNN Classifier
 
-![ML Pipeline](https://github.com/<your-username>/<your-repo-name>/workflows/ML%20Pipeline/badge.svg)
+![ML Pipeline](https://github.com/ViksML/mnist-mlops/workflows/ML%20Pipeline/badge.svg)
 
 A PyTorch implementation of a lightweight CNN for MNIST digit classification with specific performance requirements.
 
