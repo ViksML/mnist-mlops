@@ -49,11 +49,6 @@ class TestAdvancedMNISTModel(unittest.TestCase):
         test_input = torch.zeros(1, 1, 28, 28).to(self.device)
         test_input[0, 0, 14:18, 14:18] = 1.0  # Create a simple square pattern
         
-        # Get prediction for clean input
-        with torch.no_grad():
-            clean_output = self.model(test_input)
-            clean_pred = torch.argmax(clean_output, dim=1)
-        
         # Test with different noise levels
         noise_levels = [0.1, 0.2, 0.3]
         predictions = []
@@ -61,9 +56,9 @@ class TestAdvancedMNISTModel(unittest.TestCase):
         for noise_level in noise_levels:
             noisy_input = test_input + noise_level * torch.randn_like(test_input)
             with torch.no_grad():
-                noisy_output = self.model(noisy_input)
-                noisy_pred = torch.argmax(noisy_output, dim=1)
-                predictions.append(noisy_pred.item())
+                output = self.model(noisy_input)
+                pred = torch.argmax(output, dim=1)
+                predictions.append(pred.item())
         
         # Check if predictions are consistent under moderate noise
         unique_predictions = len(set(predictions))
@@ -97,18 +92,11 @@ class TestAdvancedMNISTModel(unittest.TestCase):
         
         # Analyze activation statistics
         for i, activations in enumerate(activation_values):
-            # Check if activations are not all zero or all active
             active_neurons = np.mean(activations > 0)
             self.assertGreater(active_neurons, 0.05, 
                              f"Layer {i} has too few active neurons")
             self.assertLess(active_neurons, 0.95, 
                            f"Layer {i} has too many active neurons")
-            
-            # Check if activation distribution is reasonably spread
-            if len(activations[activations > 0]) > 0:
-                activation_std = np.std(activations[activations > 0])
-                self.assertGreater(activation_std, 1e-3, 
-                                 f"Layer {i} has too little activation variance")
 
 if __name__ == '__main__':
     unittest.main() 

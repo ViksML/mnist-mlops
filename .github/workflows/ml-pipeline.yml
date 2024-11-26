@@ -32,4 +32,8 @@ jobs:
         
     - name: Run basic tests
       run: |
-        python -m unittest test_basic.py -v 
+        python -m unittest test_basic.py -v
+        
+    - name: Run advanced tests
+      run: |
+        python -m unittest test_advance.py -v
